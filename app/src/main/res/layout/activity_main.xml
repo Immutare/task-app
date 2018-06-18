@@ -11,7 +11,7 @@
         android:layout_width="60dp"
         android:layout_height="19dp"
         android:layout_marginTop="16dp"
-        android:text="Summary"
+        android:text="@string/SummaryTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -24,7 +24,8 @@
         android:layout_height="36dp"
         android:layout_marginBottom="32dp"
         android:layout_marginEnd="32dp"
-        android:text="Button"
+        android:onClick="ShowNewTaskForm"
+        android:text="@string/New"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -34,38 +35,39 @@
         android:layout_height="36dp"
         android:layout_marginBottom="32dp"
         android:layout_marginStart="32dp"
-        android:text="Button"
+        android:onClick="ShowTaskListForm"
+        android:text="@string/ShowAll"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/txtTaskDone"
         android:layout_width="65dp"
         android:layout_height="20dp"
         android:layout_marginTop="48dp"
-        android:text="Task To Do"
+        android:text="@string/TaskDone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/txtTaskDoing"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Task Doing"
+        android:text="@string/TaskDoing"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/txtTaskDone" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/txtTaskToDo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Task To Do"
+        android:text="@string/TaskToDo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/txtTaskDoing" />
 
 </android.support.constraint.ConstraintLayout>

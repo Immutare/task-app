@@ -1,0 +1,134 @@
+package com.example.carlosgarcia.task_app;
+
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.View;
+
+import java.util.List;
+
+public class TaskListActivity extends AppCompatActivity {
+    String strTag = "CEGG";
+    BroadcastReceiver showTaskReceiver = new ShowTaskReceiver();
+
+
+    //------------------------------------------------------------------------------------------------------------------
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_task_list);
+
+        //                                                  //To register a receiver of the broadcast
+        IntentFilter intentFilter = new IntentFilter("com.CEGG.CUSTOM_INTENT.TasksReady");
+        this.registerReceiver(this.showTaskReceiver, intentFilter);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    @Override
+    protected void onResume()
+    //                                                  //Called when the activity has become visible.
+    {
+        super.onResume();
+        TaskDB taskDBInstance = TaskDB.getTaskDB(getApplicationContext());
+        DBUtil.DBGetAllTask(taskDBInstance, getApplicationContext());
+    }
+    //------------------------------------------------------------------------------------------------------------------
+    @Override
+    protected void onPause()
+    //                                                      //Called when another activity is taking focus.
+    {
+        super.onPause();
+        Log.d(strTag, "The onPause() event");
+
+        //                                                  //To unregister a receiver of the broadcast
+        Log.d(strTag, "Unregistrando....");
+        this.unregisterReceiver(this.showTaskReceiver);
+    }
+    //------------------------------------------------------------------------------------------------------------------
+    @Override
+    public void onDestroy()
+    //                                                      //Called just before the activity is destroyed.
+    {
+        super.onDestroy();
+        //                                                  //Debugging purpose.
+        Log.d(strTag, "The onDestroy() event");
+        //                                                  //Destroy de DB INSTANCE.
+        // TaskDB.destroyInstance();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    public void ShowAllTask(View view)
+    //                                                  //onClick-btnShowAll (Show All button)
+    {
+        TaskDB taskDBInstance = TaskDB.getTaskDB(getApplicationContext());
+        DBUtil.DBGetAllTask(taskDBInstance, getApplicationContext());
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    public void ShowToDoTask(View view)
+    //                                                  //onClick-btnToDo (To Do button)
+    {
+        TaskDB taskDBInstance = TaskDB.getTaskDB(getApplicationContext());
+        DBUtil.DBGetToDoTask(taskDBInstance, getApplicationContext());
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    public void ShowDoingTaskForm(View view)
+    //                                                  //onClick-btnDoing (Doing button)
+    {
+        TaskDB taskDBInstance = TaskDB.getTaskDB(getApplicationContext());
+        DBUtil.DBGetDoingTask(taskDBInstance, getApplicationContext());
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    public void ShowDoneTaskForm(View view)
+    //                                                  //onClick-btnDone (Done button)
+    {
+        TaskDB taskDBInstance = TaskDB.getTaskDB(getApplicationContext());
+        DBUtil.DBGetDoneTask(taskDBInstance, getApplicationContext());
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    public void BackToMainActivity(View view) {
+
+        //                                                  //Back to main activity.
+        finish();
+    }
+    //------------------------------------------------------------------------------------------------------------------
+    private class ShowTaskReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //                                              //When com.LGF.CUSTOM_INTENT.TasksReady occurs
+
+            List<taskTask> listOfTask = DBUtil.getTasks();
+            for (taskTask task: listOfTask){
+                Log.d("CEGG - Tasks ", task.getStrShortDesc() + ", " +
+                        String.valueOf(task.getIntPercentage()));
+            }
+
+
+            //                                                  //Referencing RecyclerView
+            RecyclerView recyclerView = findViewById(R.id.recycleViewTasks);
+
+            //                                                  //Setting the adapter for the RecyclerList
+            ListTaskAdapter listTaskAdapter = new ListTaskAdapter(listOfTask);
+            recyclerView.setAdapter(listTaskAdapter);
+
+            //                                                  //Setting the manager for the RecyclerList
+            LinearLayoutManager manager = new LinearLayoutManager(
+                    getApplicationContext(), LinearLayoutManager.VERTICAL, false);
+            recyclerView.setLayoutManager(manager);
+
+        }
+    }
+
+
+
+    //------------------------------------------------------------------------------------------------------------------
+}
